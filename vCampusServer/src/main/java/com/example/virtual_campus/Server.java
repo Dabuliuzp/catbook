@@ -112,9 +112,11 @@ public class Server{
                 }
                 String function = (String) in.readObject();
                 
-                // JWT验证 - 跳过登录请求的验证
-                if (!model.equals("1") || !function.equals("login")) {
+                // JWT验证 - 跳过登录请求的验证，不区分function的大小写
+                if (!model.equals("1") || !function.equalsIgnoreCase("login")) {
                     // 读取JWT令牌
+                    System.out.println("mode:"+model);
+                    System.out.println("function:"+function);
                     String token = (String) in.readObject();
                     
                     // 验证JWT令牌
