@@ -20,9 +20,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -36,7 +38,9 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .disable())
                 .logout(logout -> logout
-                        .permitAll());
+                        .permitAll())
+                // 添加JWT认证过滤器，在UsernamePasswordAuthenticationFilter之前执行
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
