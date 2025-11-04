@@ -1,0 +1,20 @@
+services:
+  # 服务名称：您的 Spring Boot 应用将使用此名称作为 Redis 的主机名
+  redis:
+    # 使用官方 Redis 镜像的稳定版本
+    image: redis:7.2-alpine
+    # 容器意外退出时，总是尝试重启
+    restart: always
+    # 映射端口：将宿主机（您的电脑）的 6379 端口映射到容器的 6379 端口
+    ports:
+      - "6379:6379"
+    # *** 重点修改：移除 command 参数，不设置密码 ***
+    # command: redis-server --requirepass 111  <-- 此行被移除
+    # 数据持久化配置
+    volumes:
+      - redis_data:/data
+
+# 定义命名卷，由 Docker 统一管理
+volumes:
+  redis_data:
+    driver: local
